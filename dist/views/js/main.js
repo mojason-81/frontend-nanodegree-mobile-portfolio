@@ -398,11 +398,17 @@ var pizzaElementGenerator = function(i) {
   return pizzaContainer;
 };
 
+
+var getPizzaSliderLabel = function() {
+  return document.querySelector("#pizzaSize").innerHTML;
+};
+
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
   // Changes the value for the size of the pizza above the slider
-  function changeSliderLabel(size) {
+  function changeSliderLabel(size, getPizzaSliderLabel) {
+    pizzaSliderLabel = getPizzaSliderLabel();
     switch(size) {
       case "1":
         pizzaSliderLabel = "Small";
@@ -418,11 +424,19 @@ var resizePizzas = function(size) {
     }
   }
 
-  changeSliderLabel(size);
+  // Get pizzas
+  var getPizzaArray = function() {
+    return document.querySelectorAll(".randomPizzaContainer");
+  };
+
+  var setPizzaArray = function(pizzas) {
+    // TODO set thing
+  };
 
   // Iterates through pizza elements on the page and changes their widths
-  function changePizzaSizes(size) {
-    var newWidth;
+  function changePizzaSizes(size, getPizzaArray) {
+    var newWidth = null;
+    var pizzaArray = getPizzaArray();
     switch(size) {
       case "1":
         newWidth = '25%';
@@ -436,13 +450,18 @@ var resizePizzas = function(size) {
       default:
         console.log("bug in sizeSwitcher");
     }
-    var aPizza = pizzaArray[0];
-    for (var i = 0; i < pizzaArray.length; i++) {
-      pizzaArray[i].style.width = newWidth;
+    for (var pizza in pizzaArray) {
+      // Check to make sure pizza is a DOM object.
+      // DOM objects are assigned an id here
+      // which is a number.
+      if (pizza === parseInt(pizza)) {
+        pizzaArray[pizza].style.width = newWidth;
+      }
     }
   }
 
-  changePizzaSizes(size);
+  changeSliderLabel(size, getPizzaSliderLabel);
+  changePizzaSizes(size, getPizzaArray);
 
   // User Timing API is awesome
   window.performance.mark("mark_end_resize");
@@ -459,17 +478,6 @@ for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
-// Take windowWidth out of determineDx and only set it once.
-var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-
-// Take windowWidth out of determineDx and only set it once.
-var pizzaArray = document.querySelectorAll(".randomPizzaContainer");
-
-// Take oldWidth out of determineDx and initialize it
-var oldWidth = pizzaArray[0].offsetWidth;
-
-// Only need to get this element once
-var pizzaSliderLabel = document.querySelector("#pizzaSize").innerHTML;
 
 // User Timing API again. These measurements tell you how long it took to generate the initial pizzas
 window.performance.mark("mark_end_generating");
@@ -501,18 +509,24 @@ function scrollingCheck() {
   }
 }
 
+//function getMoviePizzas() {
+//  if (movingPizzas !== undefined) {
+
+//    return movingPizzas;
+//  }
+//}
+
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
+  //var movingPizzas = getMovingPizzas();
   frame++;
   window.performance.mark("mark_start_frame");
-  var movingPizzas = document.querySelectorAll('.mover');
-
   var sine = Math.sin((document.body.scrollTop / 1250));
   for (var i = 0; i < movingPizzas.length; i++) {
     var phase = sine + (i % 5);
     movingPizzas[i].style.left = movingPizzas[i].basicLeft + 100 * phase + 'px';
   }
-  
+
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
@@ -526,6 +540,10 @@ function updatePositions() {
 
 // runs updatePositions on scroll
 window.addEventListener('scroll', scrollingCheck);
+
+// Define movingPizzas in global variable so multiple functions
+// have access to it.
+var movingPizzas;
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
@@ -541,5 +559,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
+  // Initialize value of movingPizzas after creating all of them.
+  movingPizzas = document.querySelectorAll('.mover');
   updatePositions();
 });
