@@ -426,7 +426,7 @@ var resizePizzas = function(size) {
 
   // Get pizzas
   var getPizzaArray = function() {
-    return document.querySelectorAll(".randomPizzaContainer");
+    return document.getElementsByClassName("randomPizzaContainer");
   };
 
   var setPizzaArray = function(pizzas) {
@@ -524,7 +524,8 @@ function updatePositions() {
   var sine = Math.sin((document.body.scrollTop / 1250));
   for (var i = 0; i < movingPizzas.length; i++) {
     var phase = sine + (i % 5);
-    movingPizzas[i].style.left = movingPizzas[i].basicLeft + 100 * phase + 'px';
+    var newLeft = movingPizzas[i].basicLeft + 100 * phase + 'px';
+    movingPizzas[i].style.transform = 'translateX(' + newLeft + ')';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -560,6 +561,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
   // Initialize value of movingPizzas after creating all of them.
-  movingPizzas = document.querySelectorAll('.mover');
-  updatePositions();
+  movingPizzas = document.getElementsByClassName('mover');
+  // Initialize movingPizzas on screen
+  // When initializing pizzas with style.transform instead of style.left
+  //  they ended up vertically aligned.
+  var sine = Math.sin((document.body.scrollTop / 1250));
+  for (var iterator = 0; iterator < movingPizzas.length; iterator++) {
+    var phase = sine + (iterator % 5);
+    movingPizzas[iterator].style.left = movingPizzas[iterator].basicLeft + 100 * phase + 'px';
+  }
 });
