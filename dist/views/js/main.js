@@ -447,12 +447,9 @@ var resizePizzas = function(size) {
       default:
         console.log("bug in sizeSwitcher");
     }
+    // Loop through pizzas and change their widths.
     for (var i = 0; i < pizzaArray.length; i++) {
-      // Check to make sure pizza is a DOM object.
-      // DOM objects are assigned an id here
-      // which is a number.
         pizzaArray[i].style.width = newWidth;
-        //console.log(pizzaArray[i]);
     }
   }
 
