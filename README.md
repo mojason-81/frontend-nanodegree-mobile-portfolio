@@ -10,29 +10,18 @@ In this repo there is a `src` folder containing the the files profided to me and
 
 Successfully tested using up-to-date versions of Chrome (as of 12 Feb 2016).
 
-#### To run the game.
+#### To view the site:
 
 Simply open `index.html` from the root directory in your browser.
-You can also type the complete path into the address bar of your browser.
-  i.e. `/home/jason/projects/performance/index.html`
-  If for some reason, that doesn't work, try preceding the path with `'file://'` as follows:
-    `file:///home/jason/projects/performance/index.html`
-    
+You can also type the complete path into the address bar of your browser.  i.e. `/home/jason/projects/performance/index.html`  If for some reason, that doesn't work, try preceding the path with `'file://'` as follows: `file:///home/jason/projects/performance/index.html`
 
-### How to play
+Additionally, you can view a the site live [here](http://www.mojason.com/performance/index.html).
 
-Using the direction keys on your keyboard, move your character toward the water at the top
-of the game board.  You get 3 lives.  After being hit by a bug, you will lose a life and you
-will lose any points you earned on that particular try.  Collect items on the board and reach
-the water to increase your score.  After losing all 3 lives, your score is set to 0.
 
-#### Scoring
+### My Modifictions
 
-Reach the water:  20 pts
-Rock:             5 pts
-Blue Gem:         20 pts
-Green Gem:        30 pts
-Orange Gem:       40 pts
-Heart:            50 pts
-Key:              60 pts
-Star:             75 pts
+Move media query for smartphones into it's own `.css` file and only load it when needed.  Do the same with the media query for print.  Move all other styles into head of HTML doc.
+Delete web font link.
+Delete analytics.
+Add `async` attr. to call to perfmatters.js.
+Images were compressed / resized quite a bit.
