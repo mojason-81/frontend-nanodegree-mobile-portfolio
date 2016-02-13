@@ -374,6 +374,7 @@ var pizzaElementGenerator = function(i) {
 
   pizzaContainer.classList.add("randomPizzaContainer");
   pizzaContainer.style.width = "33.33%";
+  pizzaContainer.style.minWidth = "40px";
   pizzaContainer.style.height = "325px";
   pizzaContainer.id = "pizza" + i;                // gives each pizza element a unique id
   pizzaImageContainer.classList.add("col-md-6");
@@ -399,44 +400,40 @@ var pizzaElementGenerator = function(i) {
 };
 
 
-var getPizzaSliderLabel = function() {
-  return document.querySelector("#pizzaSize").innerHTML;
+var pizzaSliderLabel = document.querySelector("#pizzaSize").innerHTML;
+
+var setPizzaSliderLabel = function(newPizzaSize) {
+  document.querySelector("#pizzaSize").innerHTML = newPizzaSize;
 };
+
+var pizzaArray = document.getElementsByClassName("randomPizzaContainer");
 
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
   // Changes the value for the size of the pizza above the slider
-  function changeSliderLabel(size, getPizzaSliderLabel) {
-    pizzaSliderLabel = getPizzaSliderLabel();
+  function changeSliderLabel(size) {
     switch(size) {
       case "1":
         pizzaSliderLabel = "Small";
+        setPizzaSliderLabel(pizzaSliderLabel);
         return;
       case "2":
         pizzaSliderLabel = "Medium";
+        setPizzaSliderLabel(pizzaSliderLabel);
         return;
       case "3":
         pizzaSliderLabel = "Large";
+        setPizzaSliderLabel(pizzaSliderLabel);
         return;
       default:
         console.log("bug in changeSliderLabel");
     }
   }
 
-  // Get pizzas
-  var getPizzaArray = function() {
-    return document.getElementsByClassName("randomPizzaContainer");
-  };
-
-  var setPizzaArray = function(pizzas) {
-    // TODO set thing
-  };
-
   // Iterates through pizza elements on the page and changes their widths
-  function changePizzaSizes(size, getPizzaArray) {
+  function changePizzaSizes(size) {
     var newWidth = null;
-    var pizzaArray = getPizzaArray();
     switch(size) {
       case "1":
         newWidth = '25%';
@@ -450,18 +447,17 @@ var resizePizzas = function(size) {
       default:
         console.log("bug in sizeSwitcher");
     }
-    for (var pizza in pizzaArray) {
+    for (var i = 0; i < pizzaArray.length; i++) {
       // Check to make sure pizza is a DOM object.
       // DOM objects are assigned an id here
       // which is a number.
-      if (pizza === parseInt(pizza)) {
-        pizzaArray[pizza].style.width = newWidth;
-      }
+        pizzaArray[i].style.width = newWidth;
+        //console.log(pizzaArray[i]);
     }
   }
 
-  changeSliderLabel(size, getPizzaSliderLabel);
-  changePizzaSizes(size, getPizzaArray);
+  changeSliderLabel(size);
+  changePizzaSizes(size);
 
   // User Timing API is awesome
   window.performance.mark("mark_end_resize");
