@@ -509,11 +509,17 @@ function scrollingCheck() {
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  var sine = Math.sin((document.body.scrollTop / 1250));
-  for (var i = 0; i < movingPizzas.length; i++) {
-    var phase = sine + (i % 5);
-    var newLeft = movingPizzas[i].basicLeft + 100 * phase + 'px';
-    movingPizzas[i].style.transform = 'translateX(' + newLeft + ')';
+  //var sine = Math.sin((document.body.scrollTop / 1250));
+  //for (var i = 0; i < movingPizzas.length; i++) {
+  //  var phase = sine + (i % 5);
+  //  var newLeft = movingPizzas[i].basicLeft + 100 * phase + 'px';
+  //  movingPizzas[i].style.transform = 'translateX(' + newLeft + ')';
+  //}
+  var sine = document.body.scrollTop / 1250;
+  var phase;
+  for (var i = 0, len =  movingPizzas.length; i < len; i++) {
+    phase = Math.sin(sine + i % 5) * 100;
+    movingPizzas[i].style.transform = 'translateX(' + phase + 'px)';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -539,15 +545,18 @@ document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
   var elem; // Declaring elem outside of loop.
+  // Moving DOM call outside for loop.
+  var movingPizzaElements = document.getElementById("movingPizzas1");
   for (var i = 0; i < 24; i++) {
     elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s; // Including 'px'
+    //elem.basicLeft = (i % cols) * s; // Includeing 'px'
+    elem.style.left = (i % cols) * s + 'px';
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.getElementById("movingPizzas1").appendChild(elem);
+    movingPizzaElements.appendChild(elem);
   }
   // Initialize value of movingPizzas after creating all of them.
   movingPizzas = document.getElementsByClassName('mover');
